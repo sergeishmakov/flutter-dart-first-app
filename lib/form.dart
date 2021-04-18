@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart' as d;
+import 'package:first_app/instance.dart';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart' as Dio;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyCustomForm extends StatefulWidget {
   @override
@@ -9,15 +11,13 @@ class MyCustomForm extends StatefulWidget {
     return MyCustomFormState();
   }
 }
-
-final tokenUrl = "https://pmrsu.ru/OAuth/Token";
-final grantType = 'password';
-final clientId = '8';
-final clientSecret = 'qweasd';
+final grantType = env['GRANT_TYPE'];
+final clientId = env['CLIENT_ID'];
+final clientSecret = env['CLIENT_SECRET'];
 
 final storage = new FlutterSecureStorage();
 
-final dio = Dio.Dio();
+final dio = createDio();
 Codec<String, String> stringToBase64 = utf8.fuse(base64);
 
 class MyCustomFormState extends State<MyCustomForm> {
@@ -28,7 +28,6 @@ class MyCustomFormState extends State<MyCustomForm> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed.
     loginController.dispose();
     passwordController.dispose();
 
@@ -45,9 +44,9 @@ class MyCustomFormState extends State<MyCustomForm> {
           _error = '';
         });
         try {
-          final response = await dio.post(tokenUrl,
+          final response = await dio.post("/OAuth/Token",
               data: "password=$password&username=$username&grant_type=$grantType",
-              options: Dio.Options(
+              options: d.Options(
                   contentType: 'application/x-www-form-urlencoded',
                   headers: {
                     "Authorization": "Basic ${stringToBase64
@@ -57,7 +56,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           final data = jsonDecode(response.toString());
           await storage.write(key: 'access_token', value: data['access_token'] );
           await storage.write(key: 'refresh_token', value: data['refresh_token'] );
-          Navigator.pushReplacementNamed(context, '/profile');
+          Navigator.pushReplacementNamed(context, '/schedule');
 
         } catch (e) {
           final error = jsonDecode(e.response.toString());

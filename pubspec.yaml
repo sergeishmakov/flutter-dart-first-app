@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  flutter_dotenv: ^3.1.0
   flutter_secure_storage: ^3.3.4
   flutter_appauth: ^0.9.1
   convert: ^2.1.1
@@ -54,6 +55,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/logo.jpg
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

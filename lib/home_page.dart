@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     checkIfAuthenticated().then((success) {
       if (success) {
-        Navigator.pushNamed(context, '/profile');
+        Navigator.pushNamed(context, '/schedule');
       } else {
         Navigator.pushNamed(context, '/sign_in');
       }
