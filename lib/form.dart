@@ -44,7 +44,7 @@ class MyCustomFormState extends State<MyCustomForm> {
           _error = '';
         });
         try {
-          final response = await dio.post("/OAuth/Token",
+          d.Response response = await dio.post("/OAuth/Token",
               data: "password=$password&username=$username&grant_type=$grantType",
               options: d.Options(
                   contentType: 'application/x-www-form-urlencoded',
@@ -53,19 +53,19 @@ class MyCustomFormState extends State<MyCustomForm> {
                         .encode('$clientId:$clientSecret')}"
                   }));
 
-          final data = jsonDecode(response.toString());
+          final data = response.data;
           await storage.write(key: 'access_token', value: data['access_token'] );
           await storage.write(key: 'refresh_token', value: data['refresh_token'] );
           Navigator.pushReplacementNamed(context, '/schedule');
 
-        } catch (e) {
+        } on d.DioError catch (e) {
           final error = jsonDecode(e.response.toString());
 
           if (error != null) {
             final errorKey = error['error'];
 
             if (errorKey == 'invalid_grant') setState(() {
-              _error = "Invalid login or password";
+              _error = "Неверный логин или пароль";
             });
           }
         }
@@ -86,17 +86,17 @@ class MyCustomFormState extends State<MyCustomForm> {
                   children: <Widget>[
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text( 'Login'),
+                      child: Text( 'Логин'),
                     ),
                     TextFormField(
                       controller: loginController,
                       validator: (value) {
                         if (value.isEmpty) {
-                          return 'Field is required';
+                          return 'Обязательное поле';
                         }
                         return null;
                       },
-                      decoration: InputDecoration(hintText: "Enter login"),
+                      decoration: InputDecoration(hintText: "Введите логин"),
                     ),
                   ],
                 ),
@@ -109,18 +109,18 @@ class MyCustomFormState extends State<MyCustomForm> {
                       children: <Widget> [
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Password'),
+                          child: Text('Пароль'),
                         ),
                         TextFormField(
                           obscureText: true,
                           controller: passwordController,
                           validator: (value) {
                             if (value.isEmpty) {
-                              return 'Field is required';
+                              return 'Обязательное поле';
                             }
                             return null;
                           },
-                          decoration: InputDecoration(hintText: "Enter password"),
+                          decoration: InputDecoration(hintText: "Введите пароль"),
                         ),
                       ],
                     ),
@@ -132,13 +132,10 @@ class MyCustomFormState extends State<MyCustomForm> {
                 ],
               ),
               Center(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: ElevatedButton(
+                child: ElevatedButton(
                     onPressed:  handleSubmit,
                     child: Text('Submit'),
                   ),
-                ),
               ),
             ]
         )

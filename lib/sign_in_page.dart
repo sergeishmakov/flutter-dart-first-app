@@ -15,24 +15,15 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       appBar: AppBar(
         leading: Image.asset('assets/logo.jpg', width: 50, height: 50 ),
-        title: Text('ЭИОС'),
+        title: Text('Вход'),
         backgroundColor: Colors.white,
         textTheme: Theme.of(context).textTheme.apply(
           bodyColor: Colors.blueGrey,
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Log in',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
-            ),
-            MyCustomForm()
-          ],
-        ),
+        padding: EdgeInsets.all(16.0),
+        child: MyCustomForm()
       ),
     );
   }

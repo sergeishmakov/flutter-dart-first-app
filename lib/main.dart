@@ -21,10 +21,10 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute:'/',
       routes: {
-        '/': (context) => HomePage(),
-        '/profile': (context) => ProfilePage(),
-        '/schedule': (context) => SchedulePage(),
-        '/sign_in': (context) => SignInPage(),
+        '/': (context) => HomePage(key: Key("0")),
+        '/profile': (context) => ProfilePage(key: Key("1"),),
+        '/schedule': (context) => SchedulePage(key: Key("2")),
+        '/sign_in': (context) => SignInPage(key: Key("3")),
       },
     );
   }

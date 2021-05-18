@@ -6,8 +6,6 @@ final storage = new FlutterSecureStorage();
 
 createApiClient() async {
   final token = await storage.read(key: 'access_token');
-  print("TOKEN:");
-  print(token);
   return Dio(
       BaseOptions(
           connectTimeout: 5000,
